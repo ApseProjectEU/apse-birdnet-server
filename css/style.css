@@ -410,7 +410,8 @@ body {
 
 .time-axis-scroll {
     flex: 1;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .time-axis {
