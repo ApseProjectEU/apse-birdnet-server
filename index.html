@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Spectrogram Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12h2l3-9 4 18 4-12 3 6h4"/>
+                </svg>
+                Audio Spectrogram Generator
+            </h1>
+            <p class="subtitle">Record, upload and analyze audio with professional spectrograms</p>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- Source Selection -->
+        <section class="panel source-panel">
+            <h2 class="panel-title">Audio Source</h2>
+            <div class="source-tabs">
+                <button class="tab-btn active" data-tab="record">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    Record
+                </button>
+                <button class="tab-btn" data-tab="upload">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Upload
+                </button>
+            </div>
+
+            <!-- Record Tab -->
+            <div class="tab-content active" id="tab-record">
+                <div class="record-container">
+                    <div class="record-visualizer">
+                        <canvas id="record-waveform" width="600" height="80"></canvas>
+                    </div>
+                    <div class="record-controls">
+                        <button id="btn-record" class="btn btn-record" title="Start Recording">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <circle cx="12" cy="12" r="8"/>
+                            </svg>
+                        </button>
+                        <button id="btn-stop-record" class="btn btn-stop" title="Stop Recording" disabled>
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <rect x="6" y="6" width="12" height="12" rx="1"/>
+                            </svg>
+                        </button>
+                        <span id="record-timer" class="record-timer">00:00</span>
+                    </div>
+                    <div id="record-status" class="status-msg"></div>
+                </div>
+            </div>
+
+            <!-- Upload Tab -->
+            <div class="tab-content" id="tab-upload">
+                <div class="upload-container" id="drop-zone">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <p>Drag and drop an audio file here</p>
+                    <p class="upload-hint">or</p>
+                    <label class="btn btn-primary upload-btn">
+                        Browse Files
+                        <input type="file" id="file-input" accept="audio/*,.wav,.mp3,.ogg,.flac,.m4a,.aac,.webm" hidden>
+                    </label>
+                    <p class="upload-formats">WAV, MP3, OGG, FLAC, M4A, AAC, WebM</p>
+                </div>
+                <div id="file-info" class="file-info hidden"></div>
+            </div>
+        </section>
+
+        <!-- Spectrogram Display -->
+        <section class="panel spectrogram-panel" id="spectrogram-section">
+            <div class="spectrogram-header">
+                <h2 class="panel-title">Spectrogram</h2>
+                <div class="spectrogram-actions">
+                    <button id="btn-zoom-in" class="btn btn-icon" title="Zoom In">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+                        </svg>
+                    </button>
+                    <button id="btn-zoom-out" class="btn btn-icon" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            <line x1="8" y1="11" x2="14" y2="11"/>
+                        </svg>
+                    </button>
+                    <button id="btn-zoom-reset" class="btn btn-icon" title="Reset Zoom">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/>
+                            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                        </svg>
+                    </button>
+                    <div class="divider-v"></div>
+                    <button id="btn-export-png" class="btn btn-icon" title="Export as PNG">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="spectrogram-wrapper" id="spectrogram-wrapper">
+                <canvas id="spectrogram-freq-axis" class="freq-axis" width="60" height="512"></canvas>
+                <div class="spectrogram-scroll" id="spectrogram-scroll">
+                    <canvas id="spectrogram-canvas" width="1200" height="512"></canvas>
+                    <canvas id="spectrogram-overlay" class="spectrogram-overlay" width="1200" height="512"></canvas>
+                </div>
+            </div>
+            <div class="spectrogram-time-axis-wrapper">
+                <div class="freq-axis-spacer"></div>
+                <div class="time-axis-scroll" id="time-axis-scroll">
+                    <canvas id="spectrogram-time-axis" class="time-axis" width="1200" height="30"></canvas>
+                </div>
+            </div>
+
+            <!-- Color scale legend -->
+            <div class="color-legend" id="color-legend">
+                <span class="legend-label">-100 dB</span>
+                <canvas id="color-legend-canvas" width="200" height="14"></canvas>
+                <span class="legend-label">0 dB</span>
+            </div>
+
+            <!-- Cursor info -->
+            <div class="cursor-info" id="cursor-info">
+                <span id="cursor-time">Time: --</span>
+                <span id="cursor-freq">Freq: --</span>
+                <span id="cursor-amp">Amp: --</span>
+            </div>
+        </section>
+
+        <!-- Audio Player -->
+        <section class="panel player-panel" id="player-section">
+            <div class="player-controls">
+                <button id="btn-play" class="btn btn-play" title="Play">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                </button>
+                <button id="btn-pause" class="btn btn-play hidden" title="Pause">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+                    </svg>
+                </button>
+                <div class="player-progress-wrapper">
+                    <div class="player-progress" id="player-progress">
+                        <div class="player-progress-bar" id="player-progress-bar"></div>
+                    </div>
+                    <div class="player-time">
+                        <span id="player-current">0:00</span>
+                        <span id="player-duration">0:00</span>
+                    </div>
+                </div>
+                <div class="volume-control">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    </svg>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" class="volume-slider">
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings -->
+        <section class="panel settings-panel">
+            <h2 class="panel-title">Spectrogram Settings</h2>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label for="fft-size">FFT Size</label>
+                    <select id="fft-size">
+                        <option value="256">256</option>
+                        <option value="512">512</option>
+                        <option value="1024">1024</option>
+                        <option value="2048" selected>2048</option>
+                        <option value="4096">4096</option>
+                        <option value="8192">8192</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="window-fn">Window Function</label>
+                    <select id="window-fn">
+                        <option value="hann" selected>Hann</option>
+                        <option value="hamming">Hamming</option>
+                        <option value="blackman">Blackman</option>
+                        <option value="bartlett">Bartlett</option>
+                        <option value="rectangular">Rectangular</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="overlap">Overlap (%)</label>
+                    <input type="range" id="overlap" min="0" max="95" step="5" value="75">
+                    <span id="overlap-value" class="range-value">75%</span>
+                </div>
+                <div class="setting-group">
+                    <label for="color-map">Color Map</label>
+                    <select id="color-map">
+                        <option value="viridis" selected>Viridis</option>
+                        <option value="magma">Magma</option>
+                        <option value="inferno">Inferno</option>
+                        <option value="plasma">Plasma</option>
+                        <option value="grayscale">Grayscale</option>
+                        <option value="jet">Jet</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="freq-scale">Frequency Scale</label>
+                    <select id="freq-scale">
+                        <option value="linear" selected>Linear</option>
+                        <option value="mel">Mel</option>
+                        <option value="log">Logarithmic</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="min-db">Min dB</label>
+                    <input type="range" id="min-db" min="-120" max="-20" step="5" value="-100">
+                    <span id="min-db-value" class="range-value">-100 dB</span>
+                </div>
+                <div class="setting-group">
+                    <label for="max-freq">Max Frequency (Hz)</label>
+                    <input type="number" id="max-freq" min="1000" max="24000" step="500" value="12000">
+                </div>
+                <div class="setting-group">
+                    <label for="pixels-per-sec">Pixels / second</label>
+                    <select id="pixels-per-sec">
+                        <option value="50">50 (compact)</option>
+                        <option value="100" selected>100 (default)</option>
+                        <option value="200">200 (detailed)</option>
+                        <option value="400">400 (high detail)</option>
+                    </select>
+                </div>
+                <div class="setting-actions">
+                    <button id="btn-regenerate" class="btn btn-primary">Regenerate Spectrogram</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>Audio Spectrogram Generator &mdash; Powered by Web Audio API</p>
+    </footer>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay hidden" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">Generating spectrogram...</p>
+    </div>
+
+    <script src="js/colormaps.js"></script>
+    <script src="js/spectrogram.js"></script>
+    <script src="js/recorder.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
