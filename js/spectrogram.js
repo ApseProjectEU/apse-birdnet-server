@@ -420,7 +420,7 @@ class SpectrogramRenderer {
         // Title
         ctx.fillStyle = '#e8eaed';
         ctx.font = 'bold 14px -apple-system, sans-serif';
-        ctx.fillText('Audio Spectrogram', padding, 20);
+        ctx.fillText('APSE Soundscapes Analyzer', padding, 20);
 
         const yOffset = 30;
         ctx.drawImage(freqAxisCanvas, 0, yOffset);
