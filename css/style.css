@@ -64,6 +64,13 @@ body {
     color: var(--text-primary);
 }
 
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
 .logo-icon {
     color: var(--accent);
 }
@@ -616,6 +623,49 @@ body {
     grid-column: 1 / -1;
 }
 
+/* BirdNET Panel */
+.birdnet-panel {
+    text-align: center;
+}
+
+.birdnet-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-birdnet {
+    padding: 0.75rem 1.5rem;
+    background: #2d7d46;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius);
+    text-decoration: none;
+}
+
+.btn-birdnet:hover {
+    background: #236b38;
+    box-shadow: 0 0 12px rgba(45, 125, 70, 0.35);
+}
+
+.btn-birdweather {
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    text-decoration: none;
+}
+
+.btn-birdweather:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent);
+}
+
 /* Footer */
 .app-footer {
     text-align: center;
@@ -624,6 +674,19 @@ body {
     font-size: 0.8rem;
     border-top: 1px solid var(--border);
     margin-top: 1rem;
+}
+
+.footer-credits {
+    margin-top: 0.4rem;
+}
+
+.footer-credits a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.footer-credits a:hover {
+    text-decoration: underline;
 }
 
 /* Loading */
