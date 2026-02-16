@@ -58,11 +58,22 @@
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
+    // BirdNET elements
+    const btnAnalyzeSpectrogram = document.getElementById('btn-analyze-spectrogram');
+    const birdnetResultsPanel = document.getElementById('birdnet-results-panel');
+    const birdnetResults = document.getElementById('birdnet-results');
+    const btnCloseResults = document.getElementById('btn-close-results');
+
+    // External URL elements
+    const audioUrlInput = document.getElementById('audio-url-input');
+    const btnLoadUrl = document.getElementById('btn-load-url');
+
     // ── State ──
     let currentAudioBuffer = null;
     let currentBlob = null;
     let recorder = new AudioRecorder();
     let player = new AudioPlayer();
+    let birdnetAnalyzer = new BirdNETAnalyzer();
     let renderer = null;
     let timerInterval = null;
     let basePixelsPerSec = 100;
@@ -404,6 +415,125 @@
             loadingOverlay.classList.remove('hidden');
         } else {
             loadingOverlay.classList.add('hidden');
+        }
+    }
+
+    // ── BirdNET Analysis ──
+    btnAnalyzeSpectrogram.addEventListener('click', async () => {
+        if (!currentAudioBuffer) return;
+        await runBirdNETAnalysis();
+    });
+
+    btnCloseResults.addEventListener('click', () => {
+        birdnetResultsPanel.classList.add('hidden');
+    });
+
+    async function runBirdNETAnalysis() {
+        // Show results panel
+        birdnetResultsPanel.classList.remove('hidden');
+
+        // Show analyzing state
+        birdnetResults.innerHTML = '<div class="birdnet-analyzing"><div class="mini-spinner"></div><span>Analyzing audio with BirdNET...</span></div>';
+
+        try {
+            const results = await birdnetAnalyzer.analyze(currentAudioBuffer, (progress) => {
+                const pct = Math.round(progress * 100);
+                birdnetResults.innerHTML = `<div class="birdnet-analyzing"><div class="mini-spinner"></div><span>Analyzing audio... ${pct}%</span></div>`;
+            });
+
+            renderBirdNETResults(results);
+        } catch (err) {
+            birdnetResults.innerHTML = `<p class="birdnet-no-results" style="color: var(--danger);">Analysis error: ${escapeHtml(err.message)}</p>`;
+        }
+    }
+
+    function renderBirdNETResults(results) {
+        if (!results || results.length === 0) {
+            birdnetResults.innerHTML = '<p class="birdnet-no-results">No species detected in this audio.</p>';
+            return;
+        }
+
+        let html = '<div class="birdnet-species-list">';
+        results.forEach((r, i) => {
+            const pct = Math.round(r.confidence * 100);
+            const level = pct >= 70 ? 'high' : pct >= 40 ? 'medium' : 'low';
+            const displayName = r.species.replace(/\s*\(.*\)/, '');
+            const scientific = r.scientificName || '';
+            const timeRange = `${r.startTime.toFixed(1)}s - ${r.endTime.toFixed(1)}s`;
+            const freqRange = r.frequencyRange || '';
+
+            html += `
+                <div class="species-card">
+                    <span class="species-rank">#${i + 1}</span>
+                    <div class="species-info">
+                        <div class="species-name">${escapeHtml(displayName)}</div>
+                        ${scientific ? `<div class="species-scientific">${escapeHtml(scientific)}</div>` : ''}
+                        <div class="species-meta">${escapeHtml(timeRange)}${freqRange ? ' &middot; ' + escapeHtml(freqRange) : ''}</div>
+                    </div>
+                    <div class="species-confidence-wrapper">
+                        <div class="species-confidence-bar">
+                            <div class="species-confidence-fill ${level}" style="width: ${pct}%"></div>
+                        </div>
+                        <span class="species-confidence-value ${level}">${pct}%</span>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        birdnetResults.innerHTML = html;
+    }
+
+    // ── External URL Audio Loading ──
+    btnLoadUrl.addEventListener('click', () => {
+        loadAudioFromUrl();
+    });
+
+    audioUrlInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            loadAudioFromUrl();
+        }
+    });
+
+    async function loadAudioFromUrl() {
+        const url = audioUrlInput.value.trim();
+        if (!url) return;
+
+        try {
+            new URL(url);
+        } catch {
+            showFileInfo('Please enter a valid URL.', true);
+            return;
+        }
+
+        showFileInfo(`Loading audio from URL...`);
+        btnLoadUrl.disabled = true;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            audioCtx.close();
+
+            const fileName = url.split('/').pop().split('?')[0] || 'audio';
+            currentAudioBuffer = audioBuffer;
+            currentBlob = new Blob([arrayBuffer]);
+
+            showFileInfo(`
+                <span class="file-name">${escapeHtml(fileName)}</span> &mdash;
+                ${audioBuffer.duration.toFixed(1)}s,
+                ${audioBuffer.sampleRate} Hz,
+                ${audioBuffer.numberOfChannels} channel${audioBuffer.numberOfChannels > 1 ? 's' : ''}
+            `);
+
+            generateSpectrogram();
+        } catch (err) {
+            showFileInfo(`Error loading audio from URL: ${escapeHtml(err.message)}`, true);
+        } finally {
+            btnLoadUrl.disabled = false;
         }
     }
 
