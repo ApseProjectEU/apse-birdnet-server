@@ -55,6 +55,10 @@
     const settingPixelsPerSec = document.getElementById('pixels-per-sec');
     const btnRegenerate = document.getElementById('btn-regenerate');
 
+    const birdnetSection = document.getElementById('birdnet-section');
+    const btnAnalyzeBirdnet = document.getElementById('btn-analyze-birdnet');
+    const birdnetResults = document.getElementById('birdnet-results');
+
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
@@ -63,6 +67,7 @@
     let currentBlob = null;
     let recorder = new AudioRecorder();
     let player = new AudioPlayer();
+    let birdnetAnalyzer = new BirdNETAnalyzer();
     let renderer = null;
     let timerInterval = null;
     let basePixelsPerSec = 100;
@@ -215,6 +220,8 @@
             // Show sections
             spectrogramSection.classList.remove('hidden');
             playerSection.classList.remove('hidden');
+            birdnetSection.classList.remove('hidden');
+            btnAnalyzeBirdnet.disabled = false;
 
             // Sync scroll
             syncTimeAxisScroll();
@@ -443,6 +450,63 @@
                 break;
         }
     });
+
+    // ── BirdNET-Lite Analysis ──
+    btnAnalyzeBirdnet.addEventListener('click', async () => {
+        if (!currentAudioBuffer) return;
+
+        btnAnalyzeBirdnet.disabled = true;
+        birdnetResults.innerHTML = '<p class="birdnet-placeholder">Analisi in corso...</p>';
+
+        try {
+            const results = await birdnetAnalyzer.analyze(currentAudioBuffer);
+            displayBirdnetResults(results);
+        } catch (err) {
+            birdnetResults.innerHTML =
+                '<div class="birdnet-error">' +
+                    '<strong>Errore:</strong> ' + escapeHtml(err.message) +
+                '</div>';
+        } finally {
+            btnAnalyzeBirdnet.disabled = false;
+        }
+    });
+
+    function displayBirdnetResults(results) {
+        if (!results || results.length === 0) {
+            birdnetResults.innerHTML =
+                '<p class="birdnet-placeholder">Nessuna specie rilevata. Prova con una registrazione diversa.</p>';
+            return;
+        }
+
+        let html = '<div class="birdnet-detections">';
+        for (const det of results) {
+            const name = det.common_name || det.species || 'Unknown';
+            const scientific = det.scientific_name || det.scientificName || '';
+            const confidence = det.confidence != null ? (det.confidence * 100).toFixed(1) : '?';
+            const start = det.start_time != null ? det.start_time.toFixed(1) : (det.startTime != null ? det.startTime.toFixed(1) : '');
+            const end = det.end_time != null ? det.end_time.toFixed(1) : (det.endTime != null ? det.endTime.toFixed(1) : '');
+            const timeRange = start && end ? start + 's - ' + end + 's' : '';
+
+            html += '<div class="birdnet-detection-card">';
+            html += '  <div class="detection-info">';
+            html += '    <span class="detection-name">' + escapeHtml(name) + '</span>';
+            if (scientific) {
+                html += '    <span class="detection-scientific">' + escapeHtml(scientific) + '</span>';
+            }
+            if (timeRange) {
+                html += '    <span class="detection-time">' + timeRange + '</span>';
+            }
+            html += '  </div>';
+            html += '  <div class="detection-confidence">';
+            html += '    <div class="confidence-bar"><div class="confidence-fill" style="width:' + confidence + '%"></div></div>';
+            html += '    <span class="confidence-value">' + confidence + '%</span>';
+            html += '  </div>';
+            html += '</div>';
+        }
+        html += '</div>';
+
+        birdnetResults.innerHTML = html;
+    }
 
     // ── Responsive canvas sizing ──
     function resizeRecordCanvas() {

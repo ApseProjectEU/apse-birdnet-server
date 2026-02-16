@@ -154,18 +154,21 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                     </svg>
-                    Species Detection (BirdNET)
+                    Species Detection (BirdNET-Lite)
                 </h2>
-                <button id="btn-analyze-birdnet" class="btn btn-primary" disabled>
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                    </svg>
-                    Analyze Audio
-                </button>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <button id="btn-analyze-birdnet" class="btn btn-primary" disabled>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        Analizza specie
+                    </button>
+                    <a href="https://birdnet.cornell.edu/api/" target="_blank" style="font-size: 0.75rem; color: var(--text-muted); text-decoration: none;" title="BirdNET Demo online">Demo online</a>
+                </div>
             </div>
             <div id="birdnet-results" class="birdnet-results">
-                <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
-                    Record or upload audio, then click "Analyze Audio" to detect bird species using BirdNET AI.
+                <p class="birdnet-placeholder">
+                    Registra o carica un file audio, poi clicca "Analizza specie" per identificare le specie con BirdNET-Lite locale.
                 </p>
             </div>
         </section>
