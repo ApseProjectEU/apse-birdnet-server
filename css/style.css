@@ -712,3 +712,78 @@ body {
 .birdnet-results {
     min-height: 60px;
 }
+
+.birdnet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.birdnet-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.birdnet-species {
+    flex: 1;
+    min-width: 0;
+}
+
+.birdnet-species strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.birdnet-freq {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.birdnet-confidence {
+    width: 140px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.birdnet-confidence span {
+    font-size: 0.8rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--text-secondary);
+    min-width: 42px;
+    text-align: right;
+}
+
+.birdnet-bar {
+    height: 6px;
+    background: var(--accent);
+    border-radius: 3px;
+    flex: 1;
+    max-width: 90px;
+}
+
+.birdnet-time {
+    font-size: 0.75rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .birdnet-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .birdnet-confidence {
+        width: 100%;
+    }
+}

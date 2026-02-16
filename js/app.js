@@ -58,11 +58,16 @@
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
+    const birdnetSection = document.getElementById('birdnet-section');
+    const btnAnalyzeBirdnet = document.getElementById('btn-analyze-birdnet');
+    const birdnetResults = document.getElementById('birdnet-results');
+
     // ── State ──
     let currentAudioBuffer = null;
     let currentBlob = null;
     let recorder = new AudioRecorder();
     let player = new AudioPlayer();
+    let birdnet = new BirdNETAnalyzer();
     let renderer = null;
     let timerInterval = null;
     let basePixelsPerSec = 100;
@@ -215,6 +220,8 @@
             // Show sections
             spectrogramSection.classList.remove('hidden');
             playerSection.classList.remove('hidden');
+            birdnetSection.classList.remove('hidden');
+            btnAnalyzeBirdnet.disabled = false;
 
             // Sync scroll
             syncTimeAxisScroll();
@@ -251,6 +258,52 @@
     btnRegenerate.addEventListener('click', () => {
         generateSpectrogram();
     });
+
+    // ── BirdNET Analysis ──
+    btnAnalyzeBirdnet.addEventListener('click', async () => {
+        if (!currentAudioBuffer || birdnet.isAnalyzing) return;
+
+        btnAnalyzeBirdnet.disabled = true;
+        birdnetResults.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Analyzing audio...</p>';
+
+        try {
+            const results = await birdnet.analyze(currentAudioBuffer, (progress) => {
+                birdnetResults.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Analyzing... ${Math.round(progress * 100)}%</p>`;
+            });
+
+            renderBirdnetResults(results);
+        } catch (err) {
+            birdnetResults.innerHTML = `<p style="color: #ef4444; text-align: center; padding: 2rem;">Analysis error: ${escapeHtml(err.message)}</p>`;
+        } finally {
+            btnAnalyzeBirdnet.disabled = false;
+        }
+    });
+
+    function renderBirdnetResults(results) {
+        if (!results || results.length === 0) {
+            birdnetResults.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No species detected.</p>';
+            return;
+        }
+
+        let html = '<div class="birdnet-list">';
+        for (const r of results) {
+            const pct = (r.confidence * 100).toFixed(1);
+            html += `
+                <div class="birdnet-item">
+                    <div class="birdnet-species">
+                        <strong>${escapeHtml(r.species)}</strong>
+                        <span class="birdnet-freq">${escapeHtml(r.frequencyRange || '')}</span>
+                    </div>
+                    <div class="birdnet-confidence">
+                        <div class="birdnet-bar" style="width: ${pct}%;"></div>
+                        <span>${pct}%</span>
+                    </div>
+                    <div class="birdnet-time">${r.startTime.toFixed(1)}s – ${r.endTime.toFixed(1)}s</div>
+                </div>`;
+        }
+        html += '</div>';
+        birdnetResults.innerHTML = html;
+    }
 
     // ── Zoom ──
     btnZoomIn.addEventListener('click', () => {
