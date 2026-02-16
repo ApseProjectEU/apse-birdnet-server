@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Spectrogram Generator</title>
+    <title>APSE Soundscapes Analyzer</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="app-header">
         <div class="header-content">
             <h1 class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M2 12h2l3-9 4 18 4-12 3 6h4"/>
-                </svg>
-                Audio Spectrogram Generator
+                <img src="logo_apse.png" alt="APSE Logo" class="logo-img">
+                APSE Soundscapes Analyzer
             </h1>
             <p class="subtitle">Record, upload and analyze audio with professional spectrograms</p>
         </div>
@@ -181,6 +179,18 @@
             </div>
         </section>
 
+        <!-- BirdNET Integration -->
+        <section class="panel birdnet-panel">
+            <div class="birdnet-actions">
+                <a href="https://birdnet.cornell.edu/demo/" target="_blank" rel="noopener noreferrer" class="btn btn-birdnet">
+                    🐦 Analyze Species with BirdNET
+                </a>
+                <a href="https://birdweather.com" target="_blank" rel="noopener noreferrer" class="btn btn-birdweather">
+                    🌍 BirdWeather Community Data
+                </a>
+            </div>
+        </section>
+
         <!-- Settings -->
         <section class="panel settings-panel">
             <h2 class="panel-title">Spectrogram Settings</h2>
@@ -256,7 +266,8 @@
     </main>
 
     <footer class="app-footer">
-        <p>Audio Spectrogram Generator &mdash; Powered by Web Audio API</p>
+        <p>APSE Soundscapes Analyzer &mdash; Powered by Web Audio API</p>
+        <p class="footer-credits">Species recognition powered by <a href="https://birdnet.cornell.edu/" target="_blank" rel="noopener noreferrer">BirdNET</a> (Cornell Lab of Ornithology)</p>
     </footer>
 
     <!-- Loading overlay -->
