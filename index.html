@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,34 +12,40 @@
             <div class="logo">
                 <img src="logo_apse.png" alt="APSE Logo" style="height: 48px;">
                 <div>
-                    <span style="font-size: 1.4rem; font-weight: 700;">APSE Soundscapes Analyzer</span>
-                    <p class="subtitle">Ecological audio analysis &mdash; Powered by APSE Project</p>
+                    <span id="appTitle" style="font-size: 1.4rem; font-weight: 700;">APSE Soundscapes Analyzer</span>
+                    <p id="appSubtitle" class="subtitle">Ecological audio analysis &mdash; Powered by APSE Project</p>
                 </div>
             </div>
+            <select id="languageSelector" class="language-selector">
+                <option value="en">English</option>
+                <option value="it">Italiano</option>
+                <option value="es">Español</option>
+                <option value="el">Ελληνικά</option>
+            </select>
         </div>
     </header>
 
     <main class="app-main">
         <!-- Source Selection -->
         <section class="panel source-panel">
-            <h2 class="panel-title">Audio Source</h2>
+            <h2 id="audioSourceTitle" class="panel-title">Audio Source</h2>
             <div class="source-tabs">
-                <button class="tab-btn active" data-tab="record">
+                <button class="tab-btn active" data-tab="record" id="recordTab">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                         <line x1="12" y1="19" x2="12" y2="23"/>
                         <line x1="8" y1="23" x2="16" y2="23"/>
                     </svg>
-                    Record
+                    <span id="recordTabText">Record</span>
                 </button>
-                <button class="tab-btn" data-tab="upload">
+                <button class="tab-btn" data-tab="upload" id="uploadTab">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="17 8 12 3 7 8"/>
                         <line x1="12" y1="3" x2="12" y2="15"/>
                     </svg>
-                    Upload
+                    <span id="uploadTabText">Upload</span>
                 </button>
             </div>
 
@@ -74,13 +80,13 @@
                         <polyline points="17 8 12 3 7 8"/>
                         <line x1="12" y1="3" x2="12" y2="15"/>
                     </svg>
-                    <p>Drag and drop an audio file here</p>
-                    <p class="upload-hint">or</p>
-                    <label class="btn btn-primary upload-btn">
-                        Browse Files
+                    <p id="dropText">Drag and drop an audio file here</p>
+                    <p id="dropOr" class="upload-hint">or</p>
+                    <label id="uploadLabel" class="btn btn-primary upload-btn">
+                        <span id="browseFilesText">Browse Files</span>
                         <input type="file" id="file-input" accept="audio/*,.wav,.mp3,.ogg,.flac,.m4a,.aac,.webm" hidden>
                     </label>
-                    <p class="upload-formats">WAV, MP3, OGG, FLAC, M4A, AAC, WebM</p>
+                    <p id="uploadFormats" class="upload-formats">WAV, MP3, OGG, FLAC, M4A, AAC, WebM</p>
                 </div>
                 <div id="file-info" class="file-info hidden"></div>
             </div>
@@ -89,7 +95,7 @@
         <!-- Spectrogram Display -->
         <section class="panel spectrogram-panel hidden" id="spectrogram-section">
             <div class="spectrogram-header">
-                <h2 class="panel-title">Spectrogram</h2>
+                <h2 id="spectrogramTitle" class="panel-title">Spectrogram</h2>
                 <div class="spectrogram-actions">
                     <button id="btn-zoom-in" class="btn btn-icon" title="Zoom In">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
@@ -149,11 +155,11 @@
 
         <!-- Species Analysis Link -->
         <div class="species-link-container hidden" id="species-link-section">
-            <a href="https://birdnet.cornell.edu/demo" target="_blank" rel="noopener noreferrer" class="species-link">
+            <a id="analyzeSpeciesBtn" href="https://birdnet.cornell.edu/demo" target="_blank" rel="noopener noreferrer" class="species-link">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-                Analizza le specie qui
+                <span id="analyzeSpeciesBtnText">Analyze species here</span>
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                     <polyline points="15 3 21 3 21 9"/>
@@ -196,10 +202,10 @@
 
         <!-- Settings -->
         <section class="panel settings-panel">
-            <h2 class="panel-title">Spectrogram Settings</h2>
+            <h2 id="settingsTitle" class="panel-title">Spectrogram Settings</h2>
             <div class="settings-grid">
                 <div class="setting-group">
-                    <label for="fft-size">FFT Size</label>
+                    <label id="labelFftSize" for="fft-size">FFT Size</label>
                     <select id="fft-size">
                         <option value="256">256</option>
                         <option value="512">512</option>
@@ -210,7 +216,7 @@
                     </select>
                 </div>
                 <div class="setting-group">
-                    <label for="window-fn">Window Function</label>
+                    <label id="labelWindowFn" for="window-fn">Window Function</label>
                     <select id="window-fn">
                         <option value="hann" selected>Hann</option>
                         <option value="hamming">Hamming</option>
@@ -220,12 +226,12 @@
                     </select>
                 </div>
                 <div class="setting-group">
-                    <label for="overlap">Overlap (%)</label>
+                    <label id="labelOverlap" for="overlap">Overlap (%)</label>
                     <input type="range" id="overlap" min="0" max="95" step="5" value="75">
                     <span id="overlap-value" class="range-value">75%</span>
                 </div>
                 <div class="setting-group">
-                    <label for="color-map">Color Map</label>
+                    <label id="labelColorMap" for="color-map">Color Map</label>
                     <select id="color-map">
                         <option value="viridis" selected>Viridis</option>
                         <option value="magma">Magma</option>
@@ -236,7 +242,7 @@
                     </select>
                 </div>
                 <div class="setting-group">
-                    <label for="freq-scale">Frequency Scale</label>
+                    <label id="labelFreqScale" for="freq-scale">Frequency Scale</label>
                     <select id="freq-scale">
                         <option value="linear" selected>Linear</option>
                         <option value="mel">Mel</option>
@@ -244,16 +250,16 @@
                     </select>
                 </div>
                 <div class="setting-group">
-                    <label for="min-db">Min dB</label>
+                    <label id="labelMinDb" for="min-db">Min dB</label>
                     <input type="range" id="min-db" min="-120" max="-20" step="5" value="-100">
                     <span id="min-db-value" class="range-value">-100 dB</span>
                 </div>
                 <div class="setting-group">
-                    <label for="max-freq">Max Frequency (Hz)</label>
+                    <label id="labelMaxFreq" for="max-freq">Max Frequency (Hz)</label>
                     <input type="number" id="max-freq" min="1000" max="24000" step="500" value="12000">
                 </div>
                 <div class="setting-group">
-                    <label for="pixels-per-sec">Pixels / second</label>
+                    <label id="labelPixelsPerSec" for="pixels-per-sec">Pixels / second</label>
                     <select id="pixels-per-sec">
                         <option value="50">50 (compact)</option>
                         <option value="100" selected>100 (default)</option>
@@ -262,14 +268,14 @@
                     </select>
                 </div>
                 <div class="setting-actions">
-                    <button id="btn-regenerate" class="btn btn-primary">Regenerate Spectrogram</button>
+                    <button id="btn-regenerate" class="btn btn-primary"><span id="regenerateText">Regenerate Spectrogram</span></button>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="app-footer">
-        <p>APSE Soundscapes Analyzer &mdash; Powered by APSE Project</p>
+        <p id="footerText">APSE Soundscapes Analyzer &mdash; Powered by APSE Project</p>
         <p style="margin-top: 0.3rem; font-size: 0.75rem;">
             <a href="https://github.com/ApseProjectEU/apse-birdnet-server" target="_blank" style="color: var(--text-muted);">GitHub</a>
         </p>
@@ -285,6 +291,7 @@
     <script src="js/spectrogram.js"></script>
     <script src="js/recorder.js"></script>
     <script src="js/player.js"></script>
+    <script src="js/translations.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

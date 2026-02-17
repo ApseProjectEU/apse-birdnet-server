@@ -53,6 +53,10 @@ body {
 .header-content {
     max-width: 1400px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .logo {
@@ -72,6 +76,27 @@ body {
     color: var(--text-secondary);
     font-size: 0.85rem;
     margin-top: 0.25rem;
+}
+
+.language-selector {
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition);
+    flex-shrink: 0;
+}
+
+.language-selector:focus {
+    border-color: var(--accent);
+}
+
+.language-selector:hover {
+    border-color: var(--border-light);
 }
 
 /* Main */

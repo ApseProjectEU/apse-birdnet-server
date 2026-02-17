@@ -60,6 +60,8 @@
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
+    const languageSelector = document.getElementById('languageSelector');
+
     // ── State ──
     let currentAudioBuffer = null;
     let currentBlob = null;
@@ -69,6 +71,70 @@
     let timerInterval = null;
     let basePixelsPerSec = 100;
     let zoomLevel = 1;
+    let currentLang = 'en';
+
+    // ── Translation system ──
+    function applyTranslations(lang) {
+        if (!translations[lang]) return;
+        currentLang = lang;
+        const t = translations[lang];
+
+        // Header
+        document.getElementById('appTitle').textContent = t.appTitle;
+        document.getElementById('appSubtitle').textContent = t.subtitle;
+
+        // Audio Source panel
+        document.getElementById('audioSourceTitle').textContent = t.audioSource;
+        document.getElementById('recordTabText').textContent = t.record;
+        document.getElementById('uploadTabText').textContent = t.upload;
+
+        // Record buttons
+        btnRecord.title = t.startRecording;
+        btnStopRecord.title = t.stopRecording;
+
+        // Upload area
+        document.getElementById('dropText').textContent = t.dragDrop;
+        document.getElementById('dropOr').textContent = t.or;
+        document.getElementById('browseFilesText').textContent = t.browseFiles;
+        document.getElementById('uploadFormats').textContent = t.uploadFormats;
+
+        // Spectrogram panel
+        document.getElementById('spectrogramTitle').textContent = t.spectrogram;
+        btnZoomIn.title = t.zoomIn;
+        btnZoomOut.title = t.zoomOut;
+        btnZoomReset.title = t.resetZoom;
+        btnExportPng.title = t.exportPng;
+
+        // Analyze species button
+        document.getElementById('analyzeSpeciesBtnText').textContent = t.analyzeButton;
+
+        // Settings panel
+        document.getElementById('settingsTitle').textContent = t.spectrogramSettings;
+        document.getElementById('labelFftSize').textContent = t.fftSize;
+        document.getElementById('labelWindowFn').textContent = t.windowFn;
+        document.getElementById('labelOverlap').textContent = t.overlap;
+        document.getElementById('labelColorMap').textContent = t.colorMap;
+        document.getElementById('labelFreqScale').textContent = t.freqScale;
+        document.getElementById('labelMinDb').textContent = t.minDb;
+        document.getElementById('labelMaxFreq').textContent = t.maxFreq;
+        document.getElementById('labelPixelsPerSec').textContent = t.pixelsPerSec;
+        document.getElementById('regenerateText').textContent = t.regenerate;
+
+        // Footer
+        document.getElementById('footerText').innerHTML =
+            t.appTitle + ' &mdash; ' + t.powered;
+
+        // Update html lang attribute
+        document.documentElement.lang = lang;
+    }
+
+    // Language selector
+    languageSelector.addEventListener('change', (e) => {
+        applyTranslations(e.target.value);
+    });
+
+    // Apply default language on load
+    applyTranslations('en');
 
     // ── Tab switching ──
     tabBtns.forEach(btn => {
@@ -100,7 +166,7 @@
             btnRecord.disabled = true;
             btnRecord.classList.add('recording');
             btnStopRecord.disabled = false;
-            recordStatus.textContent = 'Recording...';
+            recordStatus.textContent = translations[currentLang].recording;
             timerInterval = setInterval(updateRecordTimer, 100);
         }
     });
@@ -108,7 +174,7 @@
     btnStopRecord.addEventListener('click', () => {
         recorder.stop();
         resetRecordUI();
-        recordStatus.textContent = 'Processing...';
+        recordStatus.textContent = translations[currentLang].processing;
     });
 
     function updateRecordTimer() {
@@ -196,7 +262,7 @@
         player.stop();
         updatePlayerUI(0, currentAudioBuffer.duration);
 
-        showLoading(true, 'Generating spectrogram...');
+        showLoading(true, translations[currentLang].generating);
 
         const options = getSettings();
         renderer = new SpectrogramRenderer(options);
@@ -205,7 +271,7 @@
 
         try {
             await renderer.generate(currentAudioBuffer, (progress) => {
-                loadingText.textContent = `Generating spectrogram... ${Math.round(progress * 100)}%`;
+                loadingText.textContent = `${translations[currentLang].generating} ${Math.round(progress * 100)}%`;
             });
 
             renderer.renderToCanvas(spectrogramCanvas, spectrogramOverlay, freqAxisCanvas, timeAxisCanvas);
