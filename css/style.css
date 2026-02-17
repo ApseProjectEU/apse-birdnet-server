@@ -733,3 +733,23 @@ body {
     border-color: var(--accent);
     background: rgba(79, 141, 249, 0.05);
 }
+/* Analyze Species Button */
+.analyze-species-container {
+    text-align: center;
+    margin-top: 0.75rem;
+}
+.analyze-species-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.analyze-species-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(79, 141, 249, 0.05);
+}
