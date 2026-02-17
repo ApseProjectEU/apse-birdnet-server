@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +12,16 @@
             <div class="logo">
                 <img src="logo_apse.png" alt="APSE Logo" style="height: 48px;">
                 <div>
-                    <span style="font-size: 1.4rem; font-weight: 700;">APSE Soundscapes Analyzer</span>
+                    <span id="appTitle" style="font-size: 1.4rem; font-weight: 700;">APSE Soundscapes Analyzer</span>
                     <p class="subtitle">Ecological audio analysis &mdash; Powered by APSE Project</p>
                 </div>
             </div>
+            <select id="languageSelector">
+                <option value="en">English</option>
+                <option value="it">Italiano</option>
+                <option value="es">Español</option>
+                <option value="el">Ελληνικά</option>
+            </select>
         </div>
     </header>
 
@@ -31,7 +37,7 @@
                         <line x1="12" y1="19" x2="12" y2="23"/>
                         <line x1="8" y1="23" x2="16" y2="23"/>
                     </svg>
-                    Record
+                    <span>Record</span>
                 </button>
                 <button class="tab-btn" data-tab="upload">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
@@ -50,16 +56,22 @@
                         <canvas id="record-waveform" width="600" height="80"></canvas>
                     </div>
                     <div class="record-controls">
-                        <button id="btn-record" class="btn btn-record" title="Start Recording">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                                <circle cx="12" cy="12" r="8"/>
-                            </svg>
-                        </button>
-                        <button id="btn-stop-record" class="btn btn-stop" title="Stop Recording" disabled>
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                                <rect x="6" y="6" width="12" height="12" rx="1"/>
-                            </svg>
-                        </button>
+                        <div class="record-btn-group">
+                            <button id="btn-record" class="btn btn-record" title="Start Recording">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="8"/>
+                                </svg>
+                            </button>
+                            <span id="recordBtn" class="record-btn-label">Record</span>
+                        </div>
+                        <div class="record-btn-group">
+                            <button id="btn-stop-record" class="btn btn-stop" title="Stop Recording" disabled>
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <rect x="6" y="6" width="12" height="12" rx="1"/>
+                                </svg>
+                            </button>
+                            <span id="stopBtn" class="record-btn-label">Stop</span>
+                        </div>
                         <span id="record-timer" class="record-timer">00:00</span>
                     </div>
                     <div id="record-status" class="status-msg"></div>
@@ -77,7 +89,7 @@
                     <p>Drag and drop an audio file here</p>
                     <p class="upload-hint">or</p>
                     <label class="btn btn-primary upload-btn">
-                        Browse Files
+                        <span id="uploadLabel">Upload audio</span>
                         <input type="file" id="file-input" accept="audio/*,.wav,.mp3,.ogg,.flac,.m4a,.aac,.webm" hidden>
                     </label>
                     <p class="upload-formats">WAV, MP3, OGG, FLAC, M4A, AAC, WebM</p>
@@ -273,7 +285,7 @@
     </main>
 
     <footer class="app-footer">
-        <p>APSE Soundscapes Analyzer &mdash; Powered by APSE Project</p>
+        <p id="footerText">Powered by APSE Project</p>
         <p style="margin-top: 0.3rem; font-size: 0.75rem;">
             <a href="https://github.com/ApseProjectEU/apse-birdnet-server" target="_blank" style="color: var(--text-muted);">GitHub</a>
         </p>
@@ -289,6 +301,7 @@
     <script src="js/spectrogram.js"></script>
     <script src="js/recorder.js"></script>
     <script src="js/player.js"></script>
-    <script src="js/app.js"></script>
+    <script type="module" src="js/translations.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

@@ -53,6 +53,9 @@ body {
 .header-content {
     max-width: 1400px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .logo {
@@ -72,6 +75,22 @@ body {
     color: var(--text-secondary);
     font-size: 0.85rem;
     margin-top: 0.25rem;
+}
+
+#languageSelector {
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition);
+}
+
+#languageSelector:focus {
+    border-color: var(--accent);
 }
 
 /* Main */
@@ -164,6 +183,18 @@ body {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+}
+
+.record-btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.record-btn-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
 }
 
 .record-timer {
