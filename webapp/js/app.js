@@ -1,3 +1,5 @@
+import translations from './translations.js';
+
 /**
  * Main application - Connects recorder, spectrogram renderer, and player.
  */
@@ -59,6 +61,22 @@
 
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
+
+    // ── Internationalization ──
+    function applyTranslations(lang) {
+        document.getElementById("appTitle").textContent = translations[lang].appTitle;
+        document.getElementById("analyzeSpeciesBtn").textContent = translations[lang].analyzeButton;
+        document.getElementById("recordBtn").textContent = translations[lang].record;
+        document.getElementById("stopBtn").textContent = translations[lang].stop;
+        document.getElementById("uploadLabel").textContent = translations[lang].upload;
+        document.getElementById("footerText").textContent = translations[lang].powered;
+    }
+
+    applyTranslations("en");
+
+    document.getElementById("languageSelector").addEventListener("change", (e) => {
+        applyTranslations(e.target.value);
+    });
 
     // ── State ──
     let currentAudioBuffer = null;
