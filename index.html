@@ -13,7 +13,7 @@
                 <img src="logo_apse.png" alt="APSE Logo" style="height: 48px;">
                 <div>
                     <span style="font-size: 1.4rem; font-weight: 700;">APSE Soundscapes Analyzer</span>
-                    <p class="subtitle">Ecological audio analysis &mdash; Powered by <a href="https://birdnet.cornell.edu/" target="_blank" style="color: #4ade80; text-decoration: none;">BirdNET</a></p>
+                    <p class="subtitle">Ecological audio analysis &mdash; Powered by APSE Project</p>
                 </div>
             </div>
         </div>
@@ -147,31 +147,20 @@
             </div>
         </section>
 
-        <!-- BirdNET Species Detection -->
-        <section class="panel hidden" id="birdnet-section">
-            <div class="spectrogram-header">
-                <h2 class="panel-title">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                    Species Detection (BirdNET-Lite)
-                </h2>
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <button id="btn-analyze-birdnet" class="btn btn-primary" disabled>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                        </svg>
-                        Analizza specie
-                    </button>
-                    <a href="https://birdnet.cornell.edu/api/" target="_blank" style="font-size: 0.75rem; color: var(--text-muted); text-decoration: none;" title="BirdNET Demo online">Demo online</a>
-                </div>
-            </div>
-            <div id="birdnet-results" class="birdnet-results">
-                <p class="birdnet-placeholder">
-                    Registra o carica un file audio, poi clicca "Analizza specie" per identificare le specie con BirdNET-Lite locale.
-                </p>
-            </div>
-        </section>
+        <!-- Species Analysis Link -->
+        <div class="species-link-container hidden" id="species-link-section">
+            <a href="https://birdnet.cornell.edu/demo" target="_blank" rel="noopener noreferrer" class="species-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                Analizza le specie qui
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+            </a>
+        </div>
 
         <!-- Audio Player -->
         <section class="panel player-panel hidden" id="player-section">
@@ -280,9 +269,8 @@
     </main>
 
     <footer class="app-footer">
-        <p>APSE Soundscapes Analyzer &mdash; Powered by <a href="https://birdnet.cornell.edu/" target="_blank" style="color: #4ade80; text-decoration: none;">BirdNET</a> &amp; Web Audio API</p>
+        <p>APSE Soundscapes Analyzer &mdash; Powered by APSE Project</p>
         <p style="margin-top: 0.3rem; font-size: 0.75rem;">
-            <a href="https://github.com/kahst/BirdNET-Analyzer" target="_blank" style="color: var(--text-muted);">BirdNET-Analyzer</a> &bull;
             <a href="https://github.com/ApseProjectEU/apse-birdnet-server" target="_blank" style="color: var(--text-muted);">GitHub</a>
         </p>
     </footer>
@@ -297,7 +285,6 @@
     <script src="js/spectrogram.js"></script>
     <script src="js/recorder.js"></script>
     <script src="js/player.js"></script>
-    <script src="js/birdnet.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

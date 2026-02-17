@@ -708,96 +708,28 @@ body {
         font-size: 1.1rem;
     }
 }
-/* BirdNET Results */
-.birdnet-results {
-    min-height: 60px;
-}
-
-.birdnet-placeholder {
-    color: var(--text-muted);
+/* Species Analysis Link */
+.species-link-container {
     text-align: center;
-    padding: 2rem;
-    margin: 0;
+    margin-top: 0.75rem;
 }
 
-.birdnet-error {
-    color: var(--danger);
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: var(--radius);
-    padding: 1rem;
-    font-size: 0.9rem;
-}
-
-.birdnet-detections {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.birdnet-detection-card {
-    display: flex;
+.species-link {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    background: var(--bg-tertiary);
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    background: var(--bg-secondary);
+    transition: all var(--transition);
 }
 
-.detection-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    min-width: 0;
-}
-
-.detection-name {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text-primary);
-}
-
-.detection-scientific {
-    font-style: italic;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-}
-
-.detection-time {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-family: 'SF Mono', 'Fira Code', monospace;
-}
-
-.detection-confidence {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0;
-}
-
-.confidence-bar {
-    width: 80px;
-    height: 6px;
-    background: var(--bg-primary);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.confidence-fill {
-    height: 100%;
-    background: var(--success);
-    border-radius: 3px;
-    transition: width 0.3s ease;
-}
-
-.confidence-value {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--success);
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    min-width: 45px;
-    text-align: right;
+.species-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(79, 141, 249, 0.05);
 }
